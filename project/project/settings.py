@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'rest_framework_simplejwt',
     'drf_spectacular',
     'user',
+    'mail',
     'corsheaders',
 ]
 
@@ -147,13 +148,34 @@ WSGI_APPLICATION = 'project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'easy-crud',
+        'NAME': 'ai-store',
         'USER': 'postgres',
         'PASSWORD': 'admin',
         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
+
+# EMAIL_USE_TLS = True  
+# EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'  
+# EMAIL_HOST_USER = 'AKIAYMCDKVTOOQNQXDWN'  
+# EMAIL_HOST_PASSWORD = 'BD8PHRahUFNsD1vfIUc2rgjqu+7toIZIeb+wbvScs+JI'  
+# EMAIL_PORT = 587
+
+EMAIL_BACKEND = 'django_ses.SESBackend'
+
+# These are optional -- if they're set as environment variables they won't
+# need to be set here as well
+AWS_ACCESS_KEY_ID = 'AKIAYMCDKVTOKKXUFYFU'
+AWS_SECRET_ACCESS_KEY = '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'
+
+# Additionally, if you are not using the default AWS region of us-east-1,
+# you need to specify a region, like so:
+AWS_SES_REGION_NAME = 'us-east-1'
+AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+
+# # If you want to use the SESv2 client
+
 
 
 # Password validation

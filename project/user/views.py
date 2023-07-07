@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from rest_framework.request import Request
 from django.contrib.auth import authenticate
 from django.conf import settings
+from django.core.mail import send_mail
 from rest_framework import status, generics
 from .models import User
 from .serializers import UserSerializer
@@ -120,6 +121,13 @@ class UserCreate(APIView):
         user = UserSerializer(data=request.data)
         if user.is_valid():
             user.save()
+            print(user.data)
+            send_mail(
+                'Gratulujemy dolaczenia do nas!',
+                'Udalo ci sie zarejestrowac szefie!',
+                'bot.aiswiat@int.pl',
+                [user.data['email']]
+            )
             return Response({'message': 'User registered successfully.'})
         return Response(user.errors, status=400)
 
