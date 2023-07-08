@@ -7,6 +7,7 @@ class ProductCreateSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=100)
     author = serializers.CharField(max_length=100)
     description = serializers.CharField()
+    net_price = serializers.DecimalField(max_digits=6, decimal_places=2)
     cover = serializers.FileField()
 
     def create(self, validated_data):

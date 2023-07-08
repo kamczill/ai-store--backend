@@ -15,8 +15,8 @@ class ProductCreateView(APIView):
                     'cover': {
                         'type': 'string',
                         'format': 'binary'
-                        },
-                        'title': {
+                    },
+                    'title': {
                         'type': 'string',
                         'maxLength': 100
                     },
@@ -26,15 +26,20 @@ class ProductCreateView(APIView):
                     },
                     'description': {
                         'type': 'string'
+                    },
+                    'net_price': {
+                        'type': 'number',
+                        'format': 'decimal',
+                        'maximum': 9999.99,
+                        'minimum': 0
                     }
                 },
-                'required': ['cover', 'title', 'author', 'description'],
-                }
-            },
+                'required': ['cover', 'title', 'author', 'description', 'net_price']
+            }
+        },
         responses={201: ProductCreateSerializer},
         methods=["POST"]
     )
-
     def post(self, request, format=None):
         serializer = ProductCreateSerializer(data=request.data)
         if serializer.is_valid():
@@ -42,7 +47,7 @@ class ProductCreateView(APIView):
             return Response({'message': 'Form submitted successfully.'}, status=201)
         else:
             return Response(serializer.errors, status=400)
-
+        
 class ProductsGetView(generics.ListAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductGetSerializer
