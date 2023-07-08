@@ -12,6 +12,16 @@ class ProductCreateSerializer(serializers.Serializer):
 
     def create(self, validated_data):
         return Product.objects.create(**validated_data)
+    
+    def validate_title(self, value):
+        if Product.objects.filter(title=value).exists():
+            raise serializers.ValidationError("Product with this title already exists.")
+        return value
+    
+    def validate_description(self, value):
+        if Product.objects.filter(description=value).exists():
+            raise serializers.ValidationError("Product with this description already exists.")
+        return value
 
 class ProductGetSerializer(serializers.ModelSerializer):
     class Meta:

@@ -21,6 +21,7 @@ class GetFileView(APIView):
             
         # Set the appropriate content type for the response
         content_type, _ = mimetypes.guess_type(image_path)
+        print(content_type)
         if not content_type:
             content_type = 'application/octet-stream'
         
