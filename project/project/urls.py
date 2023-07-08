@@ -34,7 +34,4 @@ urlpatterns = [
     path('mail/', include('mail.urls')),
     path('products/', include('products.urls')),
     path('files/<str:image_name>', GetFileView.as_view(), name='get_file'),
-    path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
-    # Optional UI:
-    path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
 ]
