@@ -34,9 +34,6 @@ urlpatterns = [
     path('mail/', include('mail.urls')),
     path('products/', include('products.urls')),
     path('files/<str:image_name>', GetFileView.as_view(), name='get_file'),
-    path('api/token/', TokenObtainSlidingView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
-    path('api/token/verify/', TokenVerifyView.as_view(), name='token_verify'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
     # Optional UI:
     path('api/schema/redoc/', SpectacularRedocView.as_view(url_name='schema'), name='redoc'),
