@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework.permissions import IsAdminUser
 from .serializers import ProductCreateSerializer, ProductGetSerializer
 from rest_framework.parsers import MultiPartParser
 from drf_spectacular.utils import extend_schema
@@ -7,6 +8,7 @@ from rest_framework import generics
 from .models import Product
 
 class ProductCreateView(APIView):
+    permission_classes = [IsAdminUser]
     @extend_schema(
         request={
             'multipart/form-data': {
