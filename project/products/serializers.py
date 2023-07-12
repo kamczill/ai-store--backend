@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from django.utils import timezone
 from django.forms.fields import FileField
-from .models import Product
+from .models import Product, Purchase
 
 class ProductCreateSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=100)
@@ -24,6 +24,11 @@ class ProductCreateSerializer(serializers.Serializer):
         return value
 
 class ProductGetSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Product
+        fields= '__all__'
+
+class Purchase(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields= '__all__'
