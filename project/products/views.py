@@ -59,3 +59,4 @@ class ProductGetView(generics.RetrieveAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductGetSerializer
     permission_classes = []
+    

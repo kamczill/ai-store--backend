@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'user',
     'mail',
     'products',
+    'purchase',
     'corsheaders',
 ]
 

@@ -15,8 +15,3 @@ class Product(models.Model):
     cover = models.FileField(upload_to='files/')
     date_created = models.DateTimeField(default=timezone.now)
     net_price = models.DecimalField(max_digits=6, decimal_places=2)
-
-class Purchase(models.Model):
-     user = models.ForeignKey(User, on_delete=models.CASCADE)
-     product = models.ForeignKey(Product, on_delete=models.CASCADE)
-     purchase_timestamp = models.DateTimeField(auto_now_add=True)
