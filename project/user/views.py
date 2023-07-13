@@ -12,7 +12,9 @@ from django.conf import settings
 from django.core.mail import send_mail
 from rest_framework import status, generics
 from .models import User
+from purchase.models import Purchase
 from .serializers import UserSerializer
+from purchase.serializers import PurchaseSerializer
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 from rest_framework.permissions import IsAuthenticated
@@ -154,3 +156,15 @@ class EbookView(APIView):
         if request.user.id:
             response = FileResponse(open('files/e-book.pdf', 'rb'))
             return response
+        
+class UserPurchasesListView(APIView):
+    def get(self, request, *args, **kwargs):
+        try:
+            user_id = self.kwargs['id']
+            purchases = Purchase.objects.filter(user_id=user_id)
+            serializer = PurchaseSerializer(purchases, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        except KeyError:
+            return Response({"detail": "user_id not provided."}, status=status.HTTP_400_BAD_REQUEST)
+        except Purchase.DoesNotExist:
+            return Response({"detail": "User does not have any purchases."}, status=status.HTTP_404_NOT_FOUND)
