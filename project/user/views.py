@@ -161,6 +161,10 @@ class UserPurchasesListView(APIView):
     def get(self, request, *args, **kwargs):
         try:
             user_id = self.kwargs['id']
+
+            if user_id != request.user.id:
+                return Response({"detail": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
+
             purchases = Purchase.objects.filter(user_id=user_id)
             serializer = PurchaseSerializer(purchases, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
