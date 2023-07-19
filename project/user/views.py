@@ -12,6 +12,8 @@ from django.conf import settings
 from django.core.mail import send_mail
 from rest_framework import status, generics
 from .models import User
+from order.models import Order
+from order.serializers import OrderSerializer
 from .serializers import UserSerializer
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
@@ -148,6 +150,14 @@ class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
+
+class CurrentUserOrderList(generics.ListAPIView):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        user = self.request.user
+        return Order.objects.filter(user=user)
     
 class EbookView(APIView):
     def get(self, request):

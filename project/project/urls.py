@@ -33,6 +33,7 @@ urlpatterns = [
     path('users/', include('user.urls')),
     path('mail/', include('mail.urls')),
     path('products/', include('products.urls')),
+    path('orders/', include('order.urls')),
     path('files/<str:image_name>', GetFileView.as_view(), name='get_file'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
 ]

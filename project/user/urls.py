@@ -7,6 +7,7 @@ urlpatterns = [
     path('refresh/', views.RefreshView.as_view(), name='refresshhhh'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('me/', views.CurrentUser.as_view(), name='current_user'),
+    path('me/orders/', views.CurrentUserOrderList.as_view(), name='current_user_orders'),
     path('<int:pk>/', views.UserDetail.as_view()),
     path('e-book/', views.EbookView.as_view(), name='e-book'),
 ]
