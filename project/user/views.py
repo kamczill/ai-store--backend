@@ -13,7 +13,7 @@ from django.core.mail import send_mail
 from rest_framework import status, generics
 from .models import User
 from order.models import Order
-from order.serializers import OrderSerializer
+from order.serializers import OrderSerializer, OrderDetailSerializer
 from .serializers import UserSerializer
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
@@ -152,7 +152,7 @@ class UserDetail(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
 class CurrentUserOrderList(generics.ListAPIView):
-    serializer_class = OrderSerializer
+    serializer_class = OrderDetailSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
