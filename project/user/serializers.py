@@ -16,3 +16,13 @@ class UserSerializer(serializers.ModelSerializer):
         )
         return user
     
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(required=True)
+    new_password = serializers.CharField(required=True, min_length=8)
+    confirm_new_password = serializers.CharField(required=True, min_length=8)
+
+    def validate(self, data):
+        # Check that the new password and confirmed password are the same
+        if data['new_password'] != data['confirm_new_password']:
+            raise serializers.ValidationError({"confirm_new_password": "The two password fields didn’t match."})
+        return data

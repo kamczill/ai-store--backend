@@ -7,14 +7,14 @@ from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
-from django.contrib.auth import authenticate
+from django.contrib.auth import authenticate, get_user_model
 from django.conf import settings
 from django.core.mail import send_mail
 from rest_framework import status, generics
 from .models import User
 from order.models import Order
 from order.serializers import OrderSerializer, OrderDetailSerializer
-from .serializers import UserSerializer
+from .serializers import UserSerializer, ChangePasswordSerializer
 from drf_spectacular.utils import extend_schema, OpenApiParameter, OpenApiExample
 from drf_spectacular.types import OpenApiTypes
 from rest_framework.permissions import IsAuthenticated
@@ -164,7 +164,43 @@ class EbookView(APIView):
         if request.user.id:
             response = FileResponse(open('files/e-book.pdf', 'rb'))
             return response
-        
+
+User = get_user_model()
+class ChangePasswordView(APIView):
+    """
+    An endpoint for changing password.
+    """
+    permission_classes = (IsAuthenticated,)
+    serializer_class = ChangePasswordSerializer
+    
+    @extend_schema(
+        summary="Change User Password",
+        description="API view for changing the user password",
+        request=ChangePasswordSerializer,
+        responses={
+            200: {"type": "object", "properties": {"detail": {"type": "string", "example": "Password updated successfully"}}},
+            400: {"type": "object", "properties": {"detail": {"type": "string", "example": "Invalid old password"}}},
+        },
+    )
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data)
+
+        if serializer.is_valid():
+            user = request.user
+            old_password = serializer.validated_data.get("old_password")
+            new_password = serializer.validated_data.get("new_password")
+            confirm_new_password = serializer.validated_data.get("confirm_new_password")
+
+            if not user.check_password(old_password):
+                return Response({"old_password": ["Wrong password."]}, status=status.HTTP_400_BAD_REQUEST)
+
+            user.set_password(new_password)
+            user.save()
+
+            return Response({"detail": "Password updated successfully"}, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 # class UserPurchasesListView(APIView):
 #     def get(self, request, *args, **kwargs):
 #         try:
