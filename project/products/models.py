@@ -16,3 +16,4 @@ class Product(models.Model):
     date_created = models.DateTimeField(default=timezone.now)
     net_price = models.DecimalField(max_digits=6, decimal_places=2)
     tax = models.PositiveIntegerField(default=5)
+    free = models.BooleanField(default=False)

@@ -34,9 +34,17 @@ class ProductCreateView(APIView):
                         'format': 'decimal',
                         'maximum': 9999.99,
                         'minimum': 0
+                    },
+                    'tax': {
+                    'type': 'integer',
+                    'minimum': 0,
+                    'maximum': 100
+                    },
+                     'free': {
+                    'type': 'boolean',
                     }
                 },
-                'required': ['cover', 'title', 'author', 'description', 'net_price']
+                'required': ['cover', 'title', 'author', 'description', 'net_price', 'free']
             }
         },
         responses={201: ProductCreateSerializer},

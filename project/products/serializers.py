@@ -9,6 +9,9 @@ class ProductCreateSerializer(serializers.Serializer):
     description = serializers.CharField()
     net_price = serializers.DecimalField(max_digits=6, decimal_places=2)
     cover = serializers.FileField()
+    tax = serializers.IntegerField()
+    free = serializers.BooleanField(default=False)
+
 
     def create(self, validated_data):
         return Product.objects.create(**validated_data)

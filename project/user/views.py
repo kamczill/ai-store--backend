@@ -11,7 +11,12 @@ from django.contrib.auth import authenticate, get_user_model
 from django.conf import settings
 from django.core.mail import send_mail
 from rest_framework import status, generics
+
+from order.serializers import OrderProductSerializer
 from .models import User
+from order.models import Order, OrderProduct
+from products.models import Product
+from products.serializers import ProductGetSerializer
 from order.models import Order
 from order.serializers import OrderSerializer, OrderDetailSerializer
 from .serializers import UserSerializer, ChangePasswordSerializer
@@ -200,6 +205,42 @@ class ChangePasswordView(APIView):
             return Response({"detail": "Password updated successfully"}, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+class UserProducts(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        queryset1 = Product.objects.filter(free=True)
+        serializer1 = ProductGetSerializer(queryset1, many=True)
+
+        queryset2 = Order.objects.filter(user=request.user.id)
+
+        user_order_ids = Order.objects.filter(user=request.user.id).values_list('id', flat=True)
+        print(user_order_ids)
+        user_orders_products = OrderProduct.objects.filter(order__in=user_order_ids).values_list('product_id', flat=True)
+        print(user_orders_products)
+        products = Product.objects.filter(id__in=user_orders_products)
+        product_serializer = ProductGetSerializer(products, many=True)
+        print(product_serializer.data)
+
+        # suppose you have two serializer data outputs
+        # data1 = YourSerializer1(queryset1, many=True).data
+        # data2 = YourSerializer2(queryset2, many=True).data
+
+        # convert each data output to a set of tuples to make them hashable
+        data1_set = set(tuple(item.items()) for item in serializer1.data)
+        data2_set = set(tuple(item.items()) for item in product_serializer.data)
+
+        # perform a set union to merge and remove duplicates
+        merged_data = data1_set.union(data2_set)
+
+        # convert the result back to list of dictionaries
+        merged_data = [dict(item) for item in merged_data]
+        # print(merged_data)
+
+        return Response(merged_data, status=status.HTTP_200_OK)
+
 
 # class UserPurchasesListView(APIView):
 #     def get(self, request, *args, **kwargs):
