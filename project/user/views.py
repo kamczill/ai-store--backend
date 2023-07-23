@@ -212,7 +212,7 @@ class UserProducts(APIView):
 
     def get(self, request):
         queryset1 = Product.objects.filter(free=True)
-        serializer1 = ProductGetSerializer(queryset1, many=True)
+        serializer1 = ProductGetSerializer(queryset1, many=True, context={'request': request})
 
         queryset2 = Order.objects.filter(user=request.user.id)
 
