@@ -214,23 +214,13 @@ class UserProducts(APIView):
         queryset1 = Product.objects.filter(free=True)
         serializer1 = ProductGetSerializer(queryset1, many=True, context={'request': request})
 
-        queryset2 = Order.objects.filter(user=request.user.id)
-
         user_order_ids = Order.objects.filter(user=request.user.id).values_list('id', flat=True)
-        print(user_order_ids)
         user_orders_products = OrderProduct.objects.filter(order__in=user_order_ids).values_list('product_id', flat=True)
-        print(user_orders_products)
-        products = Product.objects.filter(id__in=user_orders_products)
-        product_serializer = ProductGetSerializer(products, many=True)
-        print(product_serializer.data)
+        queryset2 = Product.objects.filter(id__in=user_orders_products)
+        serializer2 = ProductGetSerializer(queryset1, many=True, context={'request': request})
 
-        # suppose you have two serializer data outputs
-        # data1 = YourSerializer1(queryset1, many=True).data
-        # data2 = YourSerializer2(queryset2, many=True).data
-
-        # convert each data output to a set of tuples to make them hashable
         data1_set = set(tuple(item.items()) for item in serializer1.data)
-        data2_set = set(tuple(item.items()) for item in product_serializer.data)
+        data2_set = set(tuple(item.items()) for item in serializer2.data)
 
         # perform a set union to merge and remove duplicates
         merged_data = data1_set.union(data2_set)
