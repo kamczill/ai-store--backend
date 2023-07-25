@@ -42,9 +42,16 @@ class ProductCreateView(APIView):
                     },
                      'free': {
                     'type': 'boolean',
-                    }
+                    },
+                    'file_path': {
+                        'type': 'string',
+                        'format': 'binary'
+                    },
+                     'is_downloadable': {
+                    'type': 'boolean',
+                    },
                 },
-                'required': ['cover', 'title', 'author', 'description', 'net_price', 'free']
+                'required': ['cover', 'title', 'author', 'description', 'net_price', 'free', 'tax', 'file_path', 'is_downloadable']
             }
         },
         responses={201: ProductCreateSerializer},

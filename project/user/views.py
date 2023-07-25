@@ -211,39 +211,15 @@ class UserProducts(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        queryset1 = Product.objects.filter(free=True)
-        serializer1 = ProductGetSerializer(queryset1, many=True, context={'request': request})
+        user = self.request.user
+       # Get orders for a specific user
+        orders = Order.objects.filter(user=user)
 
-        user_order_ids = Order.objects.filter(user=request.user.id).values_list('id', flat=True)
-        user_orders_products = OrderProduct.objects.filter(order__in=user_order_ids).values_list('product_id', flat=True)
-        queryset2 = Product.objects.filter(id__in=user_orders_products)
-        serializer2 = ProductGetSerializer(queryset1, many=True, context={'request': request})
+        # Get related OrderProduct objects
+        order_products = OrderProduct.objects.filter(order__in=orders)
 
-        data1_set = set(tuple(item.items()) for item in serializer1.data)
-        data2_set = set(tuple(item.items()) for item in serializer2.data)
-
-        # perform a set union to merge and remove duplicates
-        merged_data = data1_set.union(data2_set)
-
-        # convert the result back to list of dictionaries
-        merged_data = [dict(item) for item in merged_data]
-        # print(merged_data)
-
-        return Response(merged_data, status=status.HTTP_200_OK)
-
-
-# class UserPurchasesListView(APIView):
-#     def get(self, request, *args, **kwargs):
-#         try:
-#             user_id = request.user.id
-
-#             if not user_id:
-#                 return Response({"detail": "Unauthorized"}, status=status.HTTP_401_UNAUTHORIZED)
-
-#             purchases = Purchase.objects.filter(user_id=user_id)
-#             serializer = PurchaseSerializer(purchases, many=True)
-#             return Response(serializer.data, status=status.HTTP_200_OK)
-#         except KeyError:
-#             return Response({"detail": "user_id not provided."}, status=status.HTTP_400_BAD_REQUEST)
-#         except Purchase.DoesNotExist:
-#             return Response({"detail": "User does not have any purchases."}, status=status.HTTP_404_NOT_FOUND)
+        # Get related products
+        products = Product.objects.filter(orderproduct__in=order_products)
+        serialized_products = ProductGetSerializer(products, many=True, context={'request': request})
+        return Response(serialized_products.data, status=status.HTTP_200_OK)
+    

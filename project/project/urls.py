@@ -24,7 +24,7 @@ from rest_framework_simplejwt.views import (
     TokenVerifyView,
     TokenObtainSlidingView
 )
-from .views import GetFileView
+from .views import GetFileView, GetPDFFileView
 
 
 urlpatterns = [
@@ -35,5 +35,6 @@ urlpatterns = [
     path('products/', include('products.urls')),
     path('orders/', include('order.urls')),
     path('files/<str:image_name>', GetFileView.as_view(), name='get_file'),
+    path('files/products/<str:pdf_name>', GetPDFFileView.as_view(), name='get_file'),
     path('api/schema/', SpectacularAPIView.as_view(), name='schema'),
 ]
