@@ -1,8 +1,9 @@
 from rest_framework import serializers
+from django.conf import settings
 from django.utils import timezone
 from django.forms.fields import FileField
 from .models import Product
-
+import boto3
 class ProductCreateSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=100)
     author = serializers.CharField(max_length=100)
@@ -19,6 +20,13 @@ class ProductCreateSerializer(serializers.Serializer):
 
 
     def create(self, validated_data):
+        cover_file = validated_data.pop('cover')
+        file_path_file = validated_data.pop('file_path')
+
+        # Store just the filenames in the model
+        validated_data['cover'] = cover_file.name
+        validated_data['file_path'] = file_path_file.name
+
         return Product.objects.create(**validated_data)
     
     def validate_title(self, value):

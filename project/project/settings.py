@@ -12,16 +12,16 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+from decouple import Config, config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rmwy^oi(fed$qidl_wehiq5uf5sq61-%og@vdgvdk1=t(qlpcz'
+SECRET_KEY = config('SECRET_KEY', default='')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -169,14 +169,20 @@ EMAIL_BACKEND = 'django_ses.SESBackend'
 
 # These are optional -- if they're set as environment variables they won't
 # need to be set here as well
-AWS_ACCESS_KEY_ID = 'AKIAYMCDKVTOKKXUFYFU'
-AWS_SECRET_ACCESS_KEY = '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'
+AWS_ACCESS_KEY_ID = config('AWS_ACCESS_KEY', default='')
+AWS_SECRET_ACCESS_KEY = config('AWS_SECRET_ACCESS_KEY', default='')
+AWS_BUCKET_NAME = config('AWS_BUCKET_NAME', default='')
 
 # Additionally, if you are not using the default AWS region of us-east-1,
 # you need to specify a region, like so:
-AWS_SES_REGION_NAME = 'us-east-1'
-AWS_SES_REGION_ENDPOINT = 'email.us-east-1.amazonaws.com'
+AWS_SES_REGION_NAME = config('AWS_REGION_NAME', default='')
+AWS_SES_REGION_ENDPOINT = config('AWS_SES_REGION_ENDPOINT', default='')
 
+# AWS_S3_REGION_NAME = 'eu-central-1'  # e.g., 'us-west-2'
+# AWS_STORAGE_BUCKET_NAME = 'aiszef'
+# AWS_S3_FILE_OVERWRITE = False
+# AWS_DEFAULT_ACL = None
+# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # # If you want to use the SESv2 client
 
 

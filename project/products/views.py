@@ -1,3 +1,5 @@
+from django.conf import settings
+from rest_framework import status
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser
@@ -6,9 +8,12 @@ from rest_framework.parsers import MultiPartParser
 from drf_spectacular.utils import extend_schema
 from rest_framework import generics
 from .models import Product
+import boto3
 
 class ProductCreateView(APIView):
     permission_classes = [IsAdminUser]
+    parser_classes = [MultiPartParser]
+
     @extend_schema(
         request={
             'multipart/form-data': {
@@ -60,6 +65,18 @@ class ProductCreateView(APIView):
     def post(self, request, format=None):
         serializer = ProductCreateSerializer(data=request.data)
         if serializer.is_valid():
+            s3 = boto3.client(
+                's3',
+                aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY
+                )
+            try:
+                file = request.data['file_path']
+                cover = request.data['cover']
+                s3.put_object(Bucket='aiszef', Key='products/' + file.name, Body=file.read())
+                s3.put_object(Bucket='aiszef', Key='covers/' + cover.name, Body=cover.read())
+            except Exception as e:
+                return Response({'message': str(e)}, status=status.HTTP_400_BAD_REQUEST)
             serializer.save()
             return Response({'message': 'Form submitted successfully.'}, status=201)
         else:

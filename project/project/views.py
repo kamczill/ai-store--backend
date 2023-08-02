@@ -1,8 +1,12 @@
 import os
 import mimetypes
+import boto3
 
 from django.conf import settings
 from django.http import HttpResponse
+from django.conf import settings
+from django.http import HttpResponse
+from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from products.models import Product
@@ -11,8 +15,24 @@ from order.models import Order, OrderProduct
 class GetFileView(APIView):
     def get(self, request, image_name):
         # Path to the image file
-        image_path = os.path.join(settings.MEDIA_ROOT + 'files/' + image_name)
-        
+        try:
+            s3 = boto3.client('s3',
+                    aws_access_key_id=settings.AWS_ACCESS_KEY_ID,
+                    aws_secret_access_key=settings.AWS_SECRET_ACCESS_KEY,
+                    )
+            
+            # image_path = os.path.join(settings.MEDIA_ROOT + 'files/' + image_name)
+            file_obj = s3.get_object(Bucket=settings.AWS_BUCKET_NAME, Key='covers/' + image_name)
+
+            file_content = file_obj['Body'].read()
+            # Determine the content type (you may want to refine this)
+            content_type = file_obj.get('ContentType', 'application/octet-stream')
+
+            # Create and return the HttpResponse
+            response = HttpResponse(file_content, content_type=content_type)
+            return response
+        except:
+            return Response({"message": "not found"}, status=404)
         # Check if the image file exists
         if not os.path.exists(image_path):
             return HttpResponse('Image not found.', status=404)

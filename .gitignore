@@ -164,3 +164,4 @@ files
 files/
 project/files
 project/files/*
+project/.env

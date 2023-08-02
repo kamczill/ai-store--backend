@@ -16,6 +16,5 @@ urlpatterns = [
     path('me/', views.CurrentUser.as_view(), name='current_user'),
     path('me/orders/', views.CurrentUserOrderList.as_view(), name='current_user_orders'),
     path('me/products/', views.UserProducts.as_view(), name='current_user_products'),
-    path('<int:pk>/', views.UserDetail.as_view()),
-    path('e-book/', views.EbookView.as_view(), name='e-book'),
+    path('<int:pk>/', views.UserDetail.as_view())
 ]
