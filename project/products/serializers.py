@@ -24,8 +24,8 @@ class ProductCreateSerializer(serializers.Serializer):
         file_path_file = validated_data.pop('file_path')
 
         # Store just the filenames in the model
-        validated_data['cover'] = cover_file.name
-        validated_data['file_path'] = file_path_file.name
+        validated_data['cover'] = 'files/' + cover_file.name
+        validated_data['file_path'] = 'files/products/' + file_path_file.name
 
         return Product.objects.create(**validated_data)
     
