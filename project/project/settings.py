@@ -148,14 +148,20 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+POSTGRES_NAME = config('POSTGRES_NAME', default='')
+POSTGRES_USER = config('POSTGRES_USER', default='')
+POSTGRES_PASSWORD = config('POSTGRES_PASSWORD', default='')
+POSTGRES_HOST = config('POSTGRES_HOST', default='')
+POSTGRES_PORT = config('POSTGRES_PORT', default='')
+
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ai-store',
-        'USER': 'postgres',
-        'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': POSTGRES_NAME,
+        'USER': POSTGRES_USER,
+        'PASSWORD': POSTGRES_PASSWORD,
+        'HOST': POSTGRES_HOST,
+        'PORT': POSTGRES_PORT,
     }
 }
 
