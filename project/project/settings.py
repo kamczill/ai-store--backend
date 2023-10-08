@@ -246,6 +246,3 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 URL_FIELD_NAME = "none"
-
-import django_heroku
-django_heroku.settings(locals())
