@@ -8,11 +8,14 @@ from django.conf import settings
 from django.http import HttpResponse
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from products.models import Product
 from order.models import Order, OrderProduct
 
 class GetFileView(APIView):
+    authentication_classes = []
+    permission_classes = [AllowAny]
+
     def get(self, request, image_name):
         # Path to the image file
         try:
