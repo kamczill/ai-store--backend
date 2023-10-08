@@ -26,7 +26,7 @@ SECRET_KEY = config('SECRET_KEY', default='')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['xsg41svlli.execute-api.us-east-1.amazonaws.com', '127.0.0.1']
+ALLOWED_HOSTS = ['xsg41svlli.execute-api.us-east-1.amazonaws.com', '127.0.0.1', 'aiszef-3534a2048761.herokuapp.com']
 
 # Application definition
 
