@@ -38,17 +38,17 @@ cd ai-store-backend
 2. Create a virtual environment and activate it:
 ```bash
 pipenv shell
-
+```
 or
 
 ```bash
 virtualenv venv
 source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-
+```
 3. Install the required dependencies:
 ```bash
 pip install -r requirements.txt
-
+```
 4. Configure your database settings in settings.py:
 ```bash
 DATABASES = {
@@ -61,19 +61,21 @@ DATABASES = {
         'PORT': 'your_db_port',
     }
 }
+```
 
 5. Run migrations to create the database schema:
 ```bash
 python manage.py migrate
+```
 
 6. Create a superuser to access the Django admin interface:
 ```bash
 python manage.py createsuperuser
-
+```
 7. Run the development server:
 ```bash
 python manage.py runserver
-
+```
 Now you can access the Django admin interface at http://127.0.0.1:8000/admin and the API endpoints at http://127.0.0.1:8000/api
 
 ## Getting Started
