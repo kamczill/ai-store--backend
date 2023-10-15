@@ -36,25 +36,6 @@ class GetFileView(APIView):
             return response
         except:
             return Response({"message": "not found"}, status=404)
-        # Check if the image file exists
-        if not os.path.exists(image_path):
-            return HttpResponse('Image not found.', status=404)
-        
-        # Open the image file in binary mode
-        with open(image_path, 'rb') as f:
-            # Read the image data
-            image_data = f.read()
-            
-        # Set the appropriate content type for the response
-        content_type, _ = mimetypes.guess_type(image_path)
-        print(content_type)
-        if not content_type:
-            content_type = 'application/octet-stream'
-        
-        # Create the HttpResponse object with the image data and content type
-        response = HttpResponse(image_data, content_type=content_type)
-        
-        return response
     
 class GetPDFFileView(APIView):
     permission_classes = [IsAuthenticated]
