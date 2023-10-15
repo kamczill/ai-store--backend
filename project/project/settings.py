@@ -174,12 +174,6 @@ DATABASES = {
     }
 }
 
-# EMAIL_USE_TLS = True  
-# EMAIL_HOST = 'email-smtp.us-east-1.amazonaws.com'  
-# EMAIL_HOST_USER = 'AKIAYMCDKVTOOQNQXDWN'  
-# EMAIL_HOST_PASSWORD = 'BD8PHRahUFNsD1vfIUc2rgjqu+7toIZIeb+wbvScs+JI'  
-# EMAIL_PORT = 587
-
 EMAIL_BACKEND = 'django_ses.SESBackend'
 
 # These are optional -- if they're set as environment variables they won't
@@ -193,11 +187,6 @@ AWS_BUCKET_NAME = config('AWS_BUCKET_NAME', default='')
 AWS_SES_REGION_NAME = config('AWS_REGION_NAME', default='')
 AWS_SES_REGION_ENDPOINT = config('AWS_SES_REGION_ENDPOINT', default='')
 
-# AWS_S3_REGION_NAME = 'eu-central-1'  # e.g., 'us-west-2'
-# AWS_STORAGE_BUCKET_NAME = 'aiszef'
-# AWS_S3_FILE_OVERWRITE = False
-# AWS_DEFAULT_ACL = None
-# DEFAULT_FILE_STORAGE = 'storages.backends.s3boto3.S3Boto3Storage'
 # # If you want to use the SESv2 client
 
 
